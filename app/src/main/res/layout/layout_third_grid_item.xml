@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/third_grid_item_cover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/third_item_iamge_height"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/third_grid_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/spacing_4"
+        android:singleLine="true"
+        android:text="萌宠"
+        android:textColor="@color/gray_dark"
+        android:textSize="@dimen/text_size_12" />
+</LinearLayout>

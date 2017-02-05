@@ -151,7 +151,7 @@ public class FirstFragment extends BaseFragment
     OnBannerClickListener onClick = new OnBannerClickListener() {
         @Override
         public void OnBannerClick(int position) {
-            launchNewsDetail(currentBeans.getTop_stories().get(position-1).getId());
+            NewsDetailActivity.launchNewsDetail(getActivity(),currentBeans.getTop_stories().get(position-1).getId());
         }
     };
 
@@ -161,18 +161,11 @@ public class FirstFragment extends BaseFragment
             if (position>0){
                 NewsStoryBean storyBean = adapter.getdatas().getStories().get(position-1);
                 int storyId = storyBean.getId();
-                launchNewsDetail(storyId);
+                NewsDetailActivity.launchNewsDetail(getActivity(), storyId);
             }
         }
     };
 
-    private void launchNewsDetail(int id){
-        if(id<=0)
-            return;
-        Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-        intent.putExtra("newsId",id);
-        getActivity().startActivity(intent);
-    }
 
     @Override
     public void onRefresh() {

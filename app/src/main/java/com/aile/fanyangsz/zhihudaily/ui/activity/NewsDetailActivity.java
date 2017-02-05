@@ -1,5 +1,6 @@
 package com.aile.fanyangsz.zhihudaily.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,14 @@ public class NewsDetailActivity extends BaseActivity {
 
     Intent intent;
     int id;
+
+    public static void launchNewsDetail(Context from, int id){
+        if(id<=0)
+            return;
+        Intent intent = new Intent(from, NewsDetailActivity.class);
+        intent.putExtra("newsId",id);
+        from.startActivity(intent);
+    }
 
     @Override
     protected int inflateContentView() {

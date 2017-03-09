@@ -1,6 +1,5 @@
 package com.aile.fanyangsz.zhihudaily.ui.fragment;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,14 +33,17 @@ import butterknife.BindView;
 
 public class FirstFragment extends BaseFragment
         implements
-            RefreshLayout.OnLoadListener,
-            RefreshLayout.OnRefreshListener
-            {
+        RefreshLayout.OnLoadListener,
+        RefreshLayout.OnRefreshListener{
+
+    String TAG = FirstFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_refreshLayout)
     RefreshLayout mRefreshLayout;
     @BindView(R.id.fragment_list)
     ListView mListView;
+    /*@BindView(R.id.button)
+    Button button;*/
 
     Banner mBanner;
 
@@ -50,6 +52,7 @@ public class FirstFragment extends BaseFragment
     String newsDay = null;
     NewsAdapter adapter;
     NewsBeans currentBeans;
+
     @Override
     protected int inflateContentView() {
         return R.layout.layout_content_fragment;
@@ -59,13 +62,19 @@ public class FirstFragment extends BaseFragment
     protected void initView() {
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setOnLoadListener(this);
+        /*button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return onTouchEvent(motionEvent);
+            }
+        });*/
     }
 
     private void setListView() {
         adapter = new NewsAdapter(getActivity(), currentBeans);
         mListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        if(mListView.getHeaderViewsCount()==0){
+        if (mListView.getHeaderViewsCount() == 0) {
             View view = View.inflate(getActivity(), R.layout.layout_first_item_header, null);
             mBanner = (Banner) view.findViewById(R.id.banner);
             mListView.addHeaderView(view);
@@ -104,7 +113,7 @@ public class FirstFragment extends BaseFragment
     }
 
     private void requestNews(String date) {
-        HttpSDK.getInstance().getNews( date, callBack);
+        HttpSDK.getInstance().getNews(date, callBack);
     }
 
     HttpSDK.onNewsCallBack callBack = new HttpSDK.onNewsCallBack() {
@@ -126,13 +135,13 @@ public class FirstFragment extends BaseFragment
                     if (TextUtils.isEmpty(newsDay)) {
                         mRefreshLayout.setRefreshing(false);
                         storyBean.setDayTime("今日热闻");
-                        data.getStories().add(0,storyBean);
+                        data.getStories().add(0, storyBean);
                         currentBeans = data;
                         setListView();
                     } else {
 //                        mRefreshLayout.setLoading(false);
                         storyBean.setDayTime(AndroidUtils.string2Date(data.getDate()));
-                        data.getStories().add(0,storyBean);
+                        data.getStories().add(0, storyBean);
                         currentBeans.getStories().addAll(data.getStories());
                         adapter.notifyDataSetChanged();
                     }
@@ -151,15 +160,15 @@ public class FirstFragment extends BaseFragment
     OnBannerClickListener onClick = new OnBannerClickListener() {
         @Override
         public void OnBannerClick(int position) {
-            NewsDetailActivity.launchNewsDetail(getActivity(),currentBeans.getTop_stories().get(position-1).getId());
+            NewsDetailActivity.launchNewsDetail(getActivity(), currentBeans.getTop_stories().get(position - 1).getId());
         }
     };
 
     AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position>0){
-                NewsStoryBean storyBean = adapter.getdatas().getStories().get(position-1);
+            if (position > 0) {
+                NewsStoryBean storyBean = adapter.getdatas().getStories().get(position - 1);
                 int storyId = storyBean.getId();
                 NewsDetailActivity.launchNewsDetail(getActivity(), storyId);
             }
@@ -177,5 +186,34 @@ public class FirstFragment extends BaseFragment
     public void onLoad() {
         requestNews(newsDay);
     }
+
+
+    //看《Android 艺术开发探索》P134例子，view随手指滑动移动
+    /*int mLastX = 0, mLastY = 0;
+    public boolean onTouchEvent(MotionEvent event){
+        int x = (int) event.getRawX();
+        int y = (int) event.getRawY();
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:{break;}
+            case MotionEvent.ACTION_MOVE:{
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+
+                Log.d(TAG, "move, deltaX:" + deltaX + " deltaY:" + deltaY);
+
+                int translationX = (int)button.getTranslationX() + deltaX;
+                int translationY = (int)button.getTranslationY() + deltaY;
+
+                button.setTranslationX(translationX);
+                button.setTranslationY(translationY);
+                break;
+            }
+            case MotionEvent.ACTION_UP:{break;}
+            default: break;
+        }
+        mLastX = x;
+        mLastY = y;
+        return true;
+    }*/
 
 }

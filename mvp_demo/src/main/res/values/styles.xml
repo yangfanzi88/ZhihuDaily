@@ -1,0 +1,36 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/style_window_background</item>
+        <item name="android:textColorPrimary">@color/style_text_color_primary</item>
+        <item name="android:textColorSecondary">@color/style_text_color_secondary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DayTheme" parent="AppTheme">
+        <item name="nav_drawer_background">@color/nav_drawer_background</item>
+        <item name="nav_drawer_text_color">@color/nav_drawer_text_color</item>
+        <item name="android:windowBackground">@color/style_window_background</item>
+        <item name="windowBackground">@color/style_window_background</item>
+    </style>
+
+    <style name="NightTheme" parent="AppTheme">
+        <item name="nav_drawer_background">@color/color343434</item>
+        <item name="nav_drawer_text_color">@color/color999999</item>
+        <item name="android:windowBackground">@color/window_background_night</item>
+        <item name="windowBackground">@color/window_background_night</item>
+    </style>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+
+    <!--APP Theme-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="style_text_color_primary">@color/white</color>
+    <color name="style_text_color_secondary">@color/white</color>
+    <color name="style_divider">#B6B6B6</color>
+    <color name="style_window_background">@color/white</color>
+
+    <!--Day Theme-->
+    <color name="nav_drawer_background">@color/white</color>
+    <color name="nav_drawer_text_color">@color/black</color>
+
+    <!--Night Theme-->
+    <color name="window_background_night">#343434</color>
+    <color name="color343434">#343434</color>
+    <color name="color999999">#999999</color>
+
+    <!--Other Color-->
+    <color name="navigation_item_selected">#12000000</color>
+    <color name="navdrawer_text_color_selected">@color/colorPrimary</color>
+</resources>

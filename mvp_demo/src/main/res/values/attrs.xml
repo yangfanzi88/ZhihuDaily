@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="nav_drawer_background" format="color"/>
+    <attr name="nav_drawer_text_color" format="color"/>
+    <attr name="windowBackground" format="color"/>
+</resources>

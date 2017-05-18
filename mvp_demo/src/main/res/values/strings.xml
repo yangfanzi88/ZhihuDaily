@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">视界mvp</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_user_name">请登陆</string>
+    <string name="navigation_user_favorite">收藏</string>
+    <string name="navigation_offline_download">离线下载</string>
+    <string name="navigation_first_item">首页</string>
+
+
+    <string name="action_settings">Settings</string>
+</resources>

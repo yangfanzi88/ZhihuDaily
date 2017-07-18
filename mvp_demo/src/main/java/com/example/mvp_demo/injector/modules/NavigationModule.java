@@ -1,7 +1,8 @@
 package com.example.mvp_demo.injector.modules;
 
 import com.example.mvp_demo.injector.scope.PerFragment;
-import com.example.mvp_demo.presenter.NavigationPresenter;
+import com.example.mvp_demo.mvpPresenter.IBasePresenter;
+import com.example.mvp_demo.mvpPresenter.NavigationPresenter;
 import com.example.mvp_demo.ui.adapter.NavigationAdapter;
 import com.example.mvp_demo.ui.fragment.NavigationFragment;
 
@@ -23,7 +24,7 @@ public class NavigationModule {
 
     @PerFragment
     @Provides
-    public NavigationPresenter providerPresenter(){
+    public IBasePresenter providerPresenter(){
         return new NavigationPresenter(mNavigationView);
     }
 

@@ -1,54 +1,48 @@
 package com.example.mvp_demo.ui.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.mvp_demo.DailyApplication;
 import com.example.mvp_demo.R;
-import com.example.mvp_demo.injector.component.DaggerNavigationCpmponent;
+import com.example.mvp_demo.injector.component.DaggerNavigationComponent;
 import com.example.mvp_demo.injector.modules.NavigationModule;
-import com.example.mvp_demo.mode.beans.DailyThemes;
-import com.example.mvp_demo.presenter.NavigationPresenter;
+import com.example.mvp_demo.mvpMode.beans.DailyThemes;
+import com.example.mvp_demo.mvpPresenter.IBasePresenter;
 import com.example.mvp_demo.ui.activity.MainActivity;
 import com.example.mvp_demo.ui.adapter.NavigationAdapter;
-import com.example.mvp_demo.view.INavigationView;
-import com.trello.rxlifecycle.LifecycleTransformer;
+import com.example.mvp_demo.utils.Logger;
+import com.example.mvp_demo.mvpView.INavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 /**
  * Created by yangfan on 2017/4/24.
  */
 
-public class NavigationFragment extends Fragment implements  INavigationView {
+public class NavigationFragment extends BaseFragment<IBasePresenter> implements  INavigationView,NavigationDrawerCallbacks{
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     public static final String TAG = NavigationFragment.class.getSimpleName();
 
-    @Inject
-    NavigationPresenter navigationPresenter;
+
     @Inject
     NavigationAdapter mAdapter;
-    @Inject
-    NavigationPresenter mPresenter;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     int mCurrentSelectedPosition = -1;
-    List<DailyThemes.DailyTheme> mThemeList;
+    List<DailyThemes.DailyTheme> mThemeList = new ArrayList<>();
     private Context mContext;
+    private NavigationDrawerCallbacks mCallbacks;
 
 
     @Override
@@ -57,32 +51,17 @@ public class NavigationFragment extends Fragment implements  INavigationView {
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
-        initInjector();
-        mAdapter = new NavigationAdapter(this.getActivity());
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_navigation, container, false);
-        ButterKnife.bind(this, rootView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(onItemClickListener);
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mPresenter.requestData(false);
-    }
-
+    /*生命周期回调*/
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks!");
+        }
     }
 
     @Override
@@ -91,58 +70,80 @@ public class NavigationFragment extends Fragment implements  INavigationView {
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
-    private void initInjector(){
-        DaggerNavigationCpmponent.builder()
-                .applicationComponent(DailyApplication.getAppComponent())
+    @Override
+    protected int inflateContentView() {
+        return R.layout.fragment_navigation;
+    }
+
+    @Override
+    protected void initViews() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mAdapter);
+//        mAdapter.setOnItemClickListener(onItemClickListener);
+        mAdapter.setNavigationDrawerCallbacks(this);
+    }
+
+    @Override
+    protected void updateViews(boolean isRefresh) {
+        mPresenter.requestData(false);
+        Logger.e(TAG, "updateView 调用一次");
+    }
+
+    @Override
+    protected void initInjector() {
+        DaggerNavigationComponent.builder()
+                .applicationComponent(getAppComponent())
                 .navigationModule(new NavigationModule(this))
                 .build()
                 .inject(this);
     }
 
-
-    NavigationAdapter.OnItemClickListener onItemClickListener = new NavigationAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(View view, int position) {
-            if (mCurrentSelectedPosition == position) {
-                ((MainActivity)getActivity()).closeDrawer();
-                return;
-            }
-            ((MainActivity)getActivity()).closeDrawer();
-            mCurrentSelectedPosition = position;
+    @Override
+    public void showThemes(DailyThemes themes) {
+        if(mThemeList!=null && mThemeList.size()>0 ){
+            mThemeList.clear();
         }
-    };
+
+        mThemeList.addAll(themes.getSubscribed());
+        mThemeList.addAll(themes.getOthers());
+        mAdapter.setThemes(themes);
+    }
+
+//    NavigationAdapter.OnItemClickListener onItemClickListener = new NavigationAdapter.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(View view, int position) {
+//            if (mCurrentSelectedPosition == position) {
+//                ((MainActivity)getActivity()).closeDrawer();
+//                return;
+//            }
+//            ((MainActivity)getActivity()).closeDrawer();
+//            mCurrentSelectedPosition = position;
+//
+//            ((MainActivity)getActivity()).mTitle = getTitle(position);
+//            ((MainActivity)getActivity()).setActionBar();
+//        }
+//    };
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        if (mCurrentSelectedPosition == position) {
+            ((MainActivity)getActivity()).closeDrawer();
+            return;
+        }
+        ((MainActivity)getActivity()).closeDrawer();
+        mCurrentSelectedPosition = position;
+
+//        ((MainActivity)getActivity()).mTitle = getTitle(position);
+//        ((MainActivity)getActivity()).setActionBar();
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
+        }
+    }
 
     public String getTitle(int position){
         if(mThemeList == null || mThemeList.size() == 0){
             return getString(R.string.navigation_first_item);
         }
         return position == 0? getActivity().getString(R.string.navigation_first_item) : mThemeList.get(position-1).getName();
-    }
-
-    @Override
-    public void showThemes(DailyThemes themes) {
-        mThemeList = themes.getSubscribed();
-        mThemeList.addAll(themes.getOthers());
-        mAdapter.setThemes(themes);
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public <T> LifecycleTransformer<T> bindToLife() {
-        return null;
     }
 }

@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mvp_demo.R;
-import com.example.mvp_demo.mode.beans.DailyThemes;
+import com.example.mvp_demo.mvpMode.beans.DailyThemes;
+import com.example.mvp_demo.ui.fragment.NavigationDrawerCallbacks;
+import com.example.mvp_demo.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,23 +29,20 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
     private List<DailyThemes.DailyTheme> mThemeList;
     private Context mContext;
     private int mSelectedPosition = 0;
-    private OnItemClickListener mOnItemClickListener = null;
+    private NavigationDrawerCallbacks mCallbacks;
 
-
-    public static interface OnItemClickListener {
-        void onItemClick(View view , int position);
-    }
 
     public NavigationAdapter(Context context) {
         this.mContext = context;
         mThemeList = new ArrayList<>();
     }
 
-    public void setThemes(DailyThemes themes){
+    public void setThemes(DailyThemes themes) {
         mThemeList.clear();
         mThemeList = themes.getSubscribed();
         mThemeList.addAll(themes.getOthers());
         notifyDataSetChanged();
+        Logger.e("adapter", "setThemes" + mThemeList.size());
     }
 
     @Override
@@ -56,7 +55,7 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        ItemViewHolder viewHolder = (ItemViewHolder)holder;
+        ItemViewHolder viewHolder = (ItemViewHolder) holder;
         Resources resources = viewHolder.itemView.getContext().getResources();
         viewHolder.itemView.setTag(position);
         if (position == 0) {
@@ -67,13 +66,13 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
         } else {
             viewHolder.ivItemIcon.setBackgroundDrawable(null);
             viewHolder.ivItemIcon.setVisibility(View.GONE);
-            viewHolder.tvItemName.setText(mThemeList.get(position-1).getName());
+            viewHolder.tvItemName.setText(mThemeList.get(position - 1).getName());
         }
 
         if (mSelectedPosition == position) {
             viewHolder.itemView.setBackgroundColor(resources.getColor(R.color.navigation_item_selected));
             viewHolder.tvItemName.setTextColor(resources.getColor(R.color.navdrawer_text_color_selected));
-        } else  {
+        } else {
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 TypedValue outValue = new TypedValue();
                 viewHolder.itemView.getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
@@ -91,7 +90,8 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
 
     @Override
     public int getItemCount() {
-        return mThemeList.size()+1;
+        Logger.e("adapter", mThemeList.size() + 1 + "");
+        return mThemeList.size() + 1;
     }
 
     @Override
@@ -103,18 +103,14 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
     @Override
     public void onClick(View v) {
 
-        int position = (int)v.getTag();
-
-        if(mOnItemClickListener != null){
-            mOnItemClickListener.onItemClick(v, position);
-        }
+        int position = (int) v.getTag();
 
         selectPosition(position);
 
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.mOnItemClickListener = listener;
+    public void setNavigationDrawerCallbacks(NavigationDrawerCallbacks callbacks) {
+        mCallbacks = callbacks;
     }
 
     public void selectPosition(int position) {
@@ -127,6 +123,10 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
         if (mSelectedPosition != position) {
             mSelectedPosition = position;
             notifyItemChanged(mSelectedPosition);
+        }
+
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
@@ -142,7 +142,7 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -16,11 +16,13 @@ import android.widget.RelativeLayout;
 import com.example.mvp_demo.DailyApplication;
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.injector.component.ApplicationComponent;
+import com.example.mvp_demo.ui.fragment.DailyStoriesFragment;
+import com.example.mvp_demo.ui.fragment.NavigationDrawerCallbacks;
 import com.example.mvp_demo.ui.fragment.NavigationFragment;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 
     public static final String STATE_SELECT_POSITION = "state_select_position";
 
@@ -36,7 +38,7 @@ public class MainActivity extends BaseActivity {
 
     NavigationFragment mNavigationFragment;
     ActionBarDrawerToggle toggle;
-    CharSequence mTitle = "";
+    public CharSequence mTitle = "";
     private int mLastPosition = 0;
 
     @Override
@@ -62,6 +64,7 @@ public class MainActivity extends BaseActivity {
 
         mTitle = getString(R.string.navigation_first_item);
         setActionBar();
+        showFragment(0);
     }
 
     @Override
@@ -81,9 +84,27 @@ public class MainActivity extends BaseActivity {
         toggle.syncState();
     }
 
-    private void setActionBar() {
+    public void setActionBar() {
 //        ActionBar actionBar = getSupportActionBar();
         toolbar.setTitle(mTitle);
+    }
+
+    private void showFragment(int position){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if(position == 0){
+            replaceFragment(R.id.content_main,new DailyStoriesFragment(),mTitle.toString());
+        }else {
+
+        }
+        transaction.commit();
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        mTitle = mNavigationFragment.getTitle(position);
+        setActionBar();
+
+        showFragment(position);
     }
 
     @Override
@@ -126,8 +147,4 @@ public class MainActivity extends BaseActivity {
         drawerLayout.closeDrawer(navigationView);
     }
 
-    public ApplicationComponent getApplicationComponent() {
-        ApplicationComponent applicationComponent = DailyApplication.getAppComponent();
-        return applicationComponent;
-    }
 }

@@ -1,7 +1,5 @@
 package com.example.mvp_demo.injector.component;
 
-import android.app.Activity;
-
 import com.example.mvp_demo.injector.modules.ActivityModule;
 import com.example.mvp_demo.injector.scope.PerActivity;
 

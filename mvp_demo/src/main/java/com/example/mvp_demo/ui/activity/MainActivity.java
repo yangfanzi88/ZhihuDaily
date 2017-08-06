@@ -1,9 +1,8 @@
 package com.example.mvp_demo.ui.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,12 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
-import com.example.mvp_demo.DailyApplication;
 import com.example.mvp_demo.R;
-import com.example.mvp_demo.injector.component.ApplicationComponent;
-import com.example.mvp_demo.ui.fragment.DailyStoriesFragment;
+import com.example.mvp_demo.ui.fragment.BaseFragment;
 import com.example.mvp_demo.ui.fragment.NavigationDrawerCallbacks;
 import com.example.mvp_demo.ui.fragment.NavigationFragment;
 
@@ -25,11 +21,12 @@ import butterknife.BindView;
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 
     public static final String STATE_SELECT_POSITION = "state_select_position";
+    private static final String STATE_SELECTED_POSITION = "state_selected_positioin";
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.content_main)
-    RelativeLayout mainContent;
+    FrameLayout mainContent;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.navigation_drawer)
@@ -53,18 +50,26 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     }
 
     @Override
-    protected void initViews() {
+    protected void initViews(Bundle savedInstanceState) {
         setUpDrawer();
-
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         mNavigationFragment = new NavigationFragment();
         transaction.add(R.id.navigation_drawer, mNavigationFragment);
         transaction.commit();
 
-        mTitle = getString(R.string.navigation_first_item);
-        setActionBar();
-        showFragment(0);
+        if(savedInstanceState == null){
+            mTitle = getString(R.string.navigation_first_item);
+            setActionBar();
+            showFragment(0);
+        }else {
+            int position = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+//            mLastPosition = position;
+            mTitle = mNavigationFragment.getTitle(position);
+            setActionBar();
+            mNavigationFragment.selectItem(position);
+        }
+
     }
 
     @Override
@@ -90,11 +95,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     }
 
     private void showFragment(int position){
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if(position == 0){
-            replaceFragment(R.id.content_main,new DailyStoriesFragment(),mTitle.toString());
+            replaceFragment(R.id.content_main, BaseFragment.newInstance(position),mTitle.toString());
         }else {
-
+            replaceFragment(R.id.content_main, BaseFragment.newInstance(position),mTitle.toString());
         }
         transaction.commit();
     }
@@ -104,7 +109,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         mTitle = mNavigationFragment.getTitle(position);
         setActionBar();
 
-        showFragment(position);
+        showFragment(mNavigationFragment.getThemeId(position));
     }
 
     @Override

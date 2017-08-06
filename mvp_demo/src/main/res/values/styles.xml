@@ -39,4 +39,9 @@
         <item name="item_story_text_color">@color/white</item>
         <item name="item_story_background_color">@color/color404040</item>
     </style>
+
+    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:colorBackground">@color/style_window_background</item>
+        <item name="android:textColor">@color/menu_text_color</item>
+    </style>
 </resources>

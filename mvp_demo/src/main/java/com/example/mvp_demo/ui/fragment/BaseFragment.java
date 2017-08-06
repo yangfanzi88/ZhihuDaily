@@ -17,7 +17,7 @@ import com.example.mvp_demo.utils.SwipeRefreshHelper;
 import com.example.mvp_demo.mvpView.IBaseView;
 import com.example.mvp_demo.widget.EmptyLayout;
 import com.trello.rxlifecycle.LifecycleTransformer;
-import com.trello.rxlifecycle.components.RxFragment;
+import com.trello.rxlifecycle.components.support.RxFragment;
 
 import javax.inject.Inject;
 
@@ -33,6 +33,7 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
      * 这里将empty的视图和SwipeRefreshLayout的下拉刷新控件统一在基类处理
      * 必须注意的是资源的ID以后在继承BaseFragment的子Fragment中一定要一样
      */
+    private static final String ARG_THEME_NUMBER = "theme_number";
 
     @Nullable
     @BindView(R.id.empty_layout)
@@ -46,11 +47,28 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
     protected Context mContext;
     private View mRootView;
     private boolean mIsMulti = false;
+    private int mArgThemeNumber;
+
+    public static BaseFragment newInstance(int position){
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_THEME_NUMBER, position);
+        BaseFragment fragment;
+        if (position == 0) {
+            fragment = new DailyStoriesFragment();
+        } else {
+            fragment = new ThemeStoriesFragment();
+        }
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        if(getArguments() != null){
+            mArgThemeNumber = getArguments().getInt(ARG_THEME_NUMBER);
+        }
     }
 
     @Nullable
@@ -157,6 +175,10 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
                 }
             });
         }
+    }
+
+    public int getThemeNumber() {
+        return mArgThemeNumber;
     }
 
     /**

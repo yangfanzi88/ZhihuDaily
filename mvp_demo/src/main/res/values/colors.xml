@@ -30,4 +30,5 @@
     <!--Other Color-->
     <color name="navigation_item_selected">#12000000</color>
     <color name="navdrawer_text_color_selected">@color/colorPrimary</color>
+    <color name="menu_text_color">@color/black</color>
 </resources>

@@ -146,4 +146,19 @@ public class NavigationFragment extends BaseFragment<IBasePresenter> implements 
         }
         return position == 0? getActivity().getString(R.string.navigation_first_item) : mThemeList.get(position-1).getName();
     }
+
+    public int getThemeId(int position){
+        if(mThemeList == null || mThemeList.size() == 0){
+            return 0;
+        }
+        return position == 0? 0 : mThemeList.get(position-1).getId();
+    }
+
+    public void selectItem(int position) {
+        if (position == mCurrentSelectedPosition) {
+            ((MainActivity)getActivity()).closeDrawer();
+            return;
+        }
+        mAdapter.selectPosition(position);
+    }
 }

@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by hefuyi on 16/8/4.
+ * Created by yangfan on 2017/7/23
  */
 public class StoryHeaderView extends RelativeLayout {
     @BindView(R.id.image)
@@ -43,7 +43,7 @@ public class StoryHeaderView extends RelativeLayout {
     private void init(){
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 getResources().getDimensionPixelSize(R.dimen.view_header_story_height)));
-        LayoutInflater.from(this.getContext()).inflate(R.layout.story_header_item, this, true);
+        LayoutInflater.from(this.getContext()).inflate(R.layout.view_header_story, this, true);
         ButterKnife.bind(this);
     }
 

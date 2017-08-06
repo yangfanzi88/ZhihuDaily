@@ -95,19 +95,23 @@ public class DailyStoryAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView;
+        RecyclerView.ViewHolder viewHolder = null;
+        View itemView = null;
         switch (viewType){
             case TYPE_HEAD:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header_viewpager,parent,false);
-                return new HeaderViewPagerHolder(itemView,topStoryList);
+                viewHolder =  new HeaderViewPagerHolder(itemView,topStoryList);
+                break;
             case TYPE_DATE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_date_item,parent,false);
-                return new DateViewHolder(itemView);
+                viewHolder = new DateViewHolder(itemView);
+                break;
             case TYPE_STORY:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_content_item,parent,false);
-                return new StoryContentHolder(itemView);
+                viewHolder = new StoryContentHolder(itemView);
+                break;
         }
-        return null;
+        return viewHolder;
     }
 
     @Override

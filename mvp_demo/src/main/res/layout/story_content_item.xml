@@ -47,7 +47,8 @@
                 android:layout_toStartOf="@+id/story_content_image"
                 android:gravity="center_vertical"
                 android:textColor="?attr/item_story_text_color"
-                android:textSize="@dimen/text_size_18" />
+                android:textSize="@dimen/text_size_18"
+                android:lines="2"/>
 
 
         </RelativeLayout>

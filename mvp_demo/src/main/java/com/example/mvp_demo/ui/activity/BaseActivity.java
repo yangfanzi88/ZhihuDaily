@@ -1,9 +1,9 @@
 package com.example.mvp_demo.ui.activity;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.example.mvp_demo.DailyApplication;
@@ -54,7 +54,7 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
         setContentView(inflateContentView());
         ButterKnife.bind(this);
         initInjector();
-        initViews();
+        initViews(savedInstanceState);
         initSwipeRefresh();
         updateUI(false);
     }
@@ -122,7 +122,7 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
      * @param fragment
      */
     protected void addFragment(int containerViewId, Fragment fragment){
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(containerViewId, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
@@ -137,7 +137,7 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
      */
     protected void replaceFragment(int containerViewId, Fragment fragment, String tag) {
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             // 设置tag
             fragmentTransaction.replace(containerViewId, fragment, tag);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -159,7 +159,7 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
     /**
      * 初始化Views
      */
-    protected abstract void initViews();
+    protected abstract void initViews(Bundle savedInstanceState);
 
     /**
      * Dragger 注入

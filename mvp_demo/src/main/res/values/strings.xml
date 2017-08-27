@@ -7,6 +7,7 @@
     <string name="navigation_user_favorite">收藏</string>
     <string name="navigation_offline_download">离线下载</string>
     <string name="navigation_first_item">首页</string>
+    <string name="app_exit_toast">再按一次退出程序</string>
 
     <string name="loading_desc">加载中...</string>
     <string name="no_more_data">- 没有更多数据 -</string>

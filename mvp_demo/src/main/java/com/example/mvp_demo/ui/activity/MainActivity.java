@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.ui.fragment.BaseFragment;
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     ActionBarDrawerToggle toggle;
     public CharSequence mTitle = "";
     private int mLastPosition = 0;
+    private long mLastExitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +97,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     }
 
     private void showFragment(int position){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(position == 0){
-            replaceFragment(R.id.content_main, BaseFragment.newInstance(position),mTitle.toString());
-        }else {
-            replaceFragment(R.id.content_main, BaseFragment.newInstance(position),mTitle.toString());
-        }
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        replaceFragment(R.id.content_main, BaseFragment.newInstance(position),mTitle.toString());
+//        transaction.commit();
     }
 
     @Override
@@ -114,10 +112,22 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        //当点击返回键的时候，获取fragment stack里面fragment数量
+        final int stackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if(stackEntryCount == 1){
+            //如果只剩下一个fragment，那么按两次，真正的退出
+            if(System.currentTimeMillis() - mLastExitTime > 2000){
+                Toast.makeText(this, R.string.app_exit_toast, Toast.LENGTH_SHORT).show();
+                mLastExitTime = System.currentTimeMillis();
+            }else {
+                finish();
+            }
+        }else {
+            //获取上一个fragment的name，刷新主页
+            mTitle = getSupportFragmentManager().getBackStackEntryAt(stackEntryCount-2).getName();
+            setActionBar();
             super.onBackPressed();
         }
     }

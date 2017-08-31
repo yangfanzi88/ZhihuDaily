@@ -2,6 +2,7 @@ package com.example.mvp_demo.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.injector.component.DaggerDailyStoryComponent;
@@ -9,7 +10,9 @@ import com.example.mvp_demo.injector.modules.DailyStoryModule;
 import com.example.mvp_demo.mvpMode.beans.DailyStories;
 import com.example.mvp_demo.mvpPresenter.IBasePresenter;
 import com.example.mvp_demo.mvpView.IDailyStoryView;
+import com.example.mvp_demo.ui.activity.StoryDetailActivity;
 import com.example.mvp_demo.ui.adapter.DailyStoryAdapter;
+import com.example.mvp_demo.ui.adapter.OnItemClickListener;
 import com.example.mvp_demo.utils.Logger;
 import com.example.mvp_demo.utils.OnRequestDataListener;
 import com.example.mvp_demo.utils.SwipeLoadMoreHelper;
@@ -22,7 +25,7 @@ import butterknife.BindView;
  * Created by yangfan on 2017/6/12.
  */
 
-public class DailyStoriesFragment extends BaseFragment<IBasePresenter> implements IDailyStoryView {
+public class DailyStoriesFragment extends BaseFragment<IBasePresenter> implements IDailyStoryView,OnItemClickListener {
 
     private final static String TAG = DailyStoriesFragment.class.getSimpleName();
 
@@ -60,7 +63,7 @@ public class DailyStoriesFragment extends BaseFragment<IBasePresenter> implement
             }
         });
         recyclerView.setOnScrollListener(helper);
-
+        mStoryAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -74,5 +77,8 @@ public class DailyStoriesFragment extends BaseFragment<IBasePresenter> implement
         mStoryAdapter.setStories(stories);
     }
 
-
+    @Override
+    public void onItemClick(View view, int position) {
+        StoryDetailActivity.launcherActivity(this.getActivity(),this.getClass(),String.valueOf(position));
+    }
 }

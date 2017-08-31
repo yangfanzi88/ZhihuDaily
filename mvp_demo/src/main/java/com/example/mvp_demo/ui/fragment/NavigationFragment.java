@@ -30,7 +30,7 @@ import butterknife.BindView;
 
 public class NavigationFragment extends BaseFragment<IBasePresenter> implements  INavigationView,NavigationDrawerCallbacks{
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    public static final String TAG = NavigationFragment.class.getSimpleName();
+    private static final String TAG = NavigationFragment.class.getSimpleName();
 
 
     @Inject

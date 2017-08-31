@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by yangfan on 2017/6/14.
  */
 
-public class DailyStoryAdapter extends RecyclerView.Adapter {
+public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnClickListener{
 
     private static final String TAG = DailyStoryAdapter.class.getSimpleName();
 
@@ -38,6 +38,11 @@ public class DailyStoryAdapter extends RecyclerView.Adapter {
 
     private List<DailyStory> dailyStoryList;
     private List<DailyStory> topStoryList;
+
+    private OnItemClickListener clickListener;
+    public void setOnItemClickListener(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
 
     public DailyStoryAdapter() {
         dailyStoryList = new ArrayList<>();
@@ -111,6 +116,9 @@ public class DailyStoryAdapter extends RecyclerView.Adapter {
                 viewHolder = new StoryContentHolder(itemView);
                 break;
         }
+        if(itemView != null){
+            itemView.setOnClickListener(this);
+        }
         return viewHolder;
     }
 
@@ -118,6 +126,7 @@ public class DailyStoryAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int type = getItemViewType(position);
         DailyStory story = dailyStoryList.get(position);
+        holder.itemView.setTag(story.getId());
         switch(type){
             case TYPE_HEAD:
                 ((HeaderViewPagerHolder)holder).bindheaderView();
@@ -139,6 +148,13 @@ public class DailyStoryAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         return dailyStoryList.get(position).getViewType();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(clickListener != null){
+            clickListener.onItemClick(v, (int)v.getTag());
+        }
     }
 
     public static class HeaderViewPagerHolder extends RecyclerView.ViewHolder{

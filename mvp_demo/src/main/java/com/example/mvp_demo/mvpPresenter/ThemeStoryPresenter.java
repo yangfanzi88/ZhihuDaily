@@ -12,13 +12,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
-import static com.example.mvp_demo.ui.fragment.NavigationFragment.TAG;
 
 /**
  * Created by yangfan on 2017/7/23.
  */
 
 public class ThemeStoryPresenter implements IBasePresenter {
+    private static String TAG = ThemeStoryPresenter.class.getSimpleName();
 
     private IThemeStoryView mView;
     private int mThemeId, mThemeStoryId;

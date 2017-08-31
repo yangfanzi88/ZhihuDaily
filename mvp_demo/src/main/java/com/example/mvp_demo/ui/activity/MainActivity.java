@@ -22,7 +22,7 @@ import butterknife.BindView;
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks {
 
     public static final String STATE_SELECT_POSITION = "state_select_position";
-    private static final String STATE_SELECTED_POSITION = "state_selected_positioin";
+    private static final String STATE_SELECTED_POSITION = "state_selected_position";
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;

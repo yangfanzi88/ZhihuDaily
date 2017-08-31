@@ -9,23 +9,20 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
                 <RelativeLayout
+                    android:id="@+id/story_detail_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/view_header_story_height" >
 
                     <ImageView
-                        android:id="@+id/iv_header_img"
+                        android:id="@+id/story_detail_header_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         />
 
                     <TextView
-                        android:id="@+id/tv_img_source"
+                        android:id="@+id/story_detail_image_source"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
@@ -36,22 +33,16 @@
                         />
 
                     <TextView
-                        android:id="@+id/tv_header_title"
+                        android:id="@+id/story_detail_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@id/tv_img_source"
+                        android:layout_above="@id/story_detail_image_source"
                         android:layout_alignParentStart="true"
                         android:layout_margin="@dimen/spacing_4"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_20"/>
                 </RelativeLayout>
 
-                <WebView
-                    android:id="@+id/wb_story_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-            </LinearLayout>
         </ScrollView>
         <include
             layout="@layout/layout_common_empty"/>

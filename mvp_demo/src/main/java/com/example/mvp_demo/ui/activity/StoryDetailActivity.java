@@ -3,8 +3,11 @@ package com.example.mvp_demo.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.ui.fragment.BaseFragment;
@@ -69,4 +72,21 @@ public class StoryDetailActivity extends BaseActivity{
 //    public void showDetail(StoryDetail detail) {
 //        Toast.makeText(this,"详情页请求成功",Toast.LENGTH_SHORT).show();
 //    }
+
+    public Toolbar getToolbar(){
+        return actionBar;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //当点击返回键的时候，获取fragment stack里面fragment数量
+        final int stackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if(stackEntryCount == 1){
+            //如果只剩下一个fragment，直接退出这个activity
+            finish();
+        }else {
+            //获取上一个fragment的name，刷新主页
+            super.onBackPressed();
+        }
+    }
 }

@@ -35,7 +35,7 @@ public class HeaderViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        StoryHeaderView storyHeaderView = StoryHeaderView.newInstance(container);
+        StoryHeaderView storyHeaderView = StoryHeaderView.newInstance(container.getContext());
         final DailyStory story = storyList.get(position);
         storyHeaderView.bindData(story.getTitle(), story.getImage(), story.getImage());
         storyHeaderView.setOnClickListener(new View.OnClickListener() {

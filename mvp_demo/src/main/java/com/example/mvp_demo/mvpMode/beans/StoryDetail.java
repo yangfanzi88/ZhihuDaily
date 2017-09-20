@@ -110,35 +110,6 @@ public class StoryDetail extends BaseBean implements Serializable {
 
 
 
-    private static class Editor{
-        private String id;
-        private String avatar;
-        private String name;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getAvatar() {
-            return avatar;
-        }
-
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
     private static class SectionBean{
         private String thumbnail;
         private int id;

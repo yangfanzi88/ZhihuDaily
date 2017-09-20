@@ -128,6 +128,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             //获取上一个fragment的name，刷新主页
             mTitle = getSupportFragmentManager().getBackStackEntryAt(stackEntryCount-2).getName();
             setActionBar();
+            mNavigationFragment.selectItem(mTitle.toString());
             super.onBackPressed();
         }
     }

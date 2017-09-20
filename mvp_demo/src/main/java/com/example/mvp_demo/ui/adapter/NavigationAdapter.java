@@ -130,6 +130,21 @@ public class NavigationAdapter extends RecyclerView.Adapter implements View.OnCl
         }
     }
 
+    public void selectPosition(String title){
+        int lastPosition = mSelectedPosition;
+        if(title.equals(mContext.getString(R.string.navigation_first_item))){
+            mSelectedPosition = 0;
+        }else {
+            for(int i = 0; i < mThemeList.size(); i ++){
+                if(mThemeList.get(i).getName().equals(title)){
+                    mSelectedPosition = i+1;
+                }
+            }
+        }
+        notifyItemChanged(lastPosition);
+        notifyItemChanged(mSelectedPosition);
+    }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 

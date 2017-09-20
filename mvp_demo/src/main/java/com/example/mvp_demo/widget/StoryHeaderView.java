@@ -58,7 +58,7 @@ public class StoryHeaderView extends RelativeLayout {
         Glide.with(getContext()).load(url).centerCrop().into(image);
     }
 
-    public static StoryHeaderView newInstance(ViewGroup container) {
-        return new StoryHeaderView(container.getContext());
+    public static StoryHeaderView newInstance(Context context) {
+        return new StoryHeaderView(context);
     }
 }

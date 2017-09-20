@@ -58,11 +58,11 @@ public class ThemeStoryAdapter extends RecyclerView.Adapter {
         View mItemView = null;
         switch (viewType){
             case TYPE_HEADER:
-                mItemView = StoryHeaderView.newInstance(parent);
+                mItemView = StoryHeaderView.newInstance(parent.getContext());
                 mViewHolder = new HeadViewHolder(mItemView);
                 break;
             case TYPE_AVATARS:
-                mItemView = AvatarsView.newInstance(parent);
+                mItemView = AvatarsView.newInstance(parent.getContext());
                 mViewHolder = new AvatarsHolder(mItemView);
                 break;
             case TYPE_ITEM:

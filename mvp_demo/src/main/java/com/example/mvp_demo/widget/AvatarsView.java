@@ -67,7 +67,7 @@ public class AvatarsView extends HorizontalScrollView {
         }
     }
 
-    public static AvatarsView newInstance(ViewGroup container){
-        return new AvatarsView(container.getContext());
+    public static AvatarsView newInstance(Context context){
+        return new AvatarsView(context);
     }
 }

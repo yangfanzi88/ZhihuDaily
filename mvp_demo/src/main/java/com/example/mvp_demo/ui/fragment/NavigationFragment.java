@@ -161,4 +161,12 @@ public class NavigationFragment extends BaseFragment<IBasePresenter> implements 
         }
         mAdapter.selectPosition(position);
     }
+
+    public void selectItem(String title){
+        if(title.equals(mThemeList.get(mCurrentSelectedPosition).getName())){
+            ((MainActivity)getActivity()).closeDrawer();
+            return;
+        }
+        mAdapter.selectPosition(title);
+    }
 }

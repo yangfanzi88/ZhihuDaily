@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by yangfan on 2017/6/14.
  */
 
-public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnClickListener{
+public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnClickListener, OnItemClickListener{
 
     private static final String TAG = DailyStoryAdapter.class.getSimpleName();
 
@@ -106,6 +106,7 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
             case TYPE_HEAD:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header_viewpager,parent,false);
                 viewHolder =  new HeaderViewPagerHolder(itemView,topStoryList);
+                ((HeaderViewPagerHolder)viewHolder).setItemListener(this);
                 break;
             case TYPE_DATE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_date_item,parent,false);
@@ -116,7 +117,7 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
                 viewHolder = new StoryContentHolder(itemView);
                 break;
         }
-        if(itemView != null){
+        if(itemView != null && viewType != TYPE_DATE){
             itemView.setOnClickListener(this);
         }
         return viewHolder;
@@ -129,7 +130,7 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
         holder.itemView.setTag(story.getId());
         switch(type){
             case TYPE_HEAD:
-                ((HeaderViewPagerHolder)holder).bindheaderView();
+                ((HeaderViewPagerHolder)holder).bindHeaderView();
                 break;
             case TYPE_DATE:
                 ((DateViewHolder)holder).bindDateView(story);
@@ -157,6 +158,13 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
         }
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        if(clickListener != null){
+            clickListener.onItemClick(view, position);
+        }
+    }
+
     public static class HeaderViewPagerHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.indicator)
         CirclePageIndicator mIndicator;
@@ -170,16 +178,20 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
             super(itemView);
             ButterKnife.bind(this,itemView);
             this.storyList = storyList;
-            mPagerAdapter = new HeaderViewPagerAdapter(storyList);
+            mPagerAdapter = new HeaderViewPagerAdapter(this.storyList);
         }
 
-        public void bindheaderView(){
+        public void bindHeaderView(){
             if(mViewPager.getAdapter() == null){
                 mViewPager.setAdapter(mPagerAdapter);
                 mIndicator.setViewPager(mViewPager);
             }else {
                 mPagerAdapter.notifyDataSetChanged();
             }
+        }
+
+        public void setItemListener(OnItemClickListener listener){
+            mPagerAdapter.setListener(listener);
         }
 
         public boolean isAutoScrolling() {

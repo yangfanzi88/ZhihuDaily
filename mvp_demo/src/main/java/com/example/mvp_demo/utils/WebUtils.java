@@ -14,7 +14,7 @@ public class WebUtils {
     public static final String ENCODING = "utf-8";
     public static final String FAIL_URL = "http//:daily.zhihu.com/";
 
-    private static final String CSS_LINK_PATTERN = " <link href=\"zhihu.css\" type=\"text/css\" rel=\"stylesheet\" />";
+    private static final String CSS_LINK_PATTERN = " <link rel=\"stylesheet\" type=\"text/css\" href=\"zhihu.css\" />";
     private static final String NIGHT_DIV_TAG_START = "<div class=\"night\">";
     private static final String NIGHT_DIV_TAG_END = "</div>";
 
@@ -27,6 +27,7 @@ public class WebUtils {
             result.append(String.format(CSS_LINK_PATTERN, cssUrl));
         }*/
         result.append(CSS_LINK_PATTERN);
+        Logger.i("buildHtmlWithCss",result.toString());
 
         if (isNightMode) {
             result.append(NIGHT_DIV_TAG_START);

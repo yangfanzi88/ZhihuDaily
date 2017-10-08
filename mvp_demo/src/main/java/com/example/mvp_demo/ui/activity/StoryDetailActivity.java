@@ -3,11 +3,12 @@ package com.example.mvp_demo.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.ui.fragment.BaseFragment;
@@ -26,7 +27,7 @@ public class StoryDetailActivity extends BaseActivity{
     @BindView(R.id.container)
     FrameLayout container;
     @BindView(R.id.actionbarToolbar)
-    Toolbar actionBar;
+    Toolbar toolbar;
 
     private int mStoryId;
 
@@ -52,6 +53,20 @@ public class StoryDetailActivity extends BaseActivity{
     @Override
     protected void initViews(Bundle savedInstanceState) {
         replaceFragment(R.id.container, StoryDetailFragment.newInstance(mStoryId), String.valueOf(mStoryId));
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(null);
+        }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -68,13 +83,9 @@ public class StoryDetailActivity extends BaseActivity{
 //        mPresenter.requestData(false);
     }
 
-//    @Override
-//    public void showDetail(StoryDetail detail) {
-//        Toast.makeText(this,"详情页请求成功",Toast.LENGTH_SHORT).show();
-//    }
 
     public Toolbar getToolbar(){
-        return actionBar;
+        return toolbar;
     }
 
     @Override
@@ -85,7 +96,6 @@ public class StoryDetailActivity extends BaseActivity{
             //如果只剩下一个fragment，直接退出这个activity
             finish();
         }else {
-            //获取上一个fragment的name，刷新主页
             super.onBackPressed();
         }
     }

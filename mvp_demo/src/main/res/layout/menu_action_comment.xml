@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:drawablePadding="@dimen/spacing_4"
+    android:paddingStart="@dimen/spacing_4"
+    android:paddingEnd="@dimen/spacing_8"
+    android:text="@string/story_menu_share"
+    android:drawableLeft="@mipmap/ic_menu_share"
+    android:textColor="@color/white"
+    android:clickable="true" />

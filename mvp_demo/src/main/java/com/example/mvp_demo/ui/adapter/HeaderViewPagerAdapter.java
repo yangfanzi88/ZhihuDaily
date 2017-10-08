@@ -14,10 +14,11 @@ import java.util.List;
  * Created by yangfan on 2017/6/23.
  */
 
-public class HeaderViewPagerAdapter extends PagerAdapter {
+public class HeaderViewPagerAdapter extends PagerAdapter implements View.OnClickListener{
 
     private final List<DailyStory> storyList;
     private int mChildCount;
+    private OnItemClickListener mListener;
 
     public HeaderViewPagerAdapter(List<DailyStory> storyList) {
         this.storyList = storyList;
@@ -45,6 +46,9 @@ public class HeaderViewPagerAdapter extends PagerAdapter {
             }
         });
         container.addView(storyHeaderView);
+
+        storyHeaderView.setTag(story.getId());
+        storyHeaderView.setOnClickListener(this);
         return storyHeaderView;
     }
 
@@ -66,5 +70,15 @@ public class HeaderViewPagerAdapter extends PagerAdapter {
             return POSITION_NONE;
         }
         return super.getItemPosition(object);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int position = (int)v.getTag();
+        mListener.onItemClick(v, position);
+    }
+
+    public void setListener(OnItemClickListener listener){
+        this.mListener = listener;
     }
 }

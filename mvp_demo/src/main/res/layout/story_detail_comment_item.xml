@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/spacing_16">
+    <ImageView
+        android:id="@+id/story_detail_comment_item_avatar"
+        android:layout_width="@dimen/story_comment_avatar"
+        android:layout_height="@dimen/story_comment_avatar" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/spacing_16"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/story_detail_comment_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/item_story_text_color"
+                android:textSize="@dimen/text_size_16"/>
+            <TextView
+                android:id="@+id/story_detail_comment_item_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:drawableLeft="@mipmap/ic_menu_unlike"
+                android:drawablePadding="@dimen/spacing_6"
+                android:textSize="@dimen/text_size_14"
+                android:textColor="?attr/item_date_text_color"
+                />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/story_detail_comment_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="?attr/item_story_text_color"
+            android:layout_marginTop="@dimen/spacing_16"/>
+        <TextView
+            android:id="@+id/story_detail_comment_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="?attr/item_date_text_color"
+            android:layout_marginTop="@dimen/spacing_16"/>
+
+    </LinearLayout>
+
+</LinearLayout>

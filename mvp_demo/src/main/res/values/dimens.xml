@@ -13,9 +13,12 @@
     <!--story fragment dimens start-->
     <dimen name="view_header_story_height">224dp</dimen>
     <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_6">6dp</dimen>
     <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_10">10dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="story_comment_avatar">36dp</dimen>
     <dimen name="story_content_image">80dp</dimen>
     <!--story fragment dimens end-->
 

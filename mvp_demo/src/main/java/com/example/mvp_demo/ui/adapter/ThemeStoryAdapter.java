@@ -29,12 +29,16 @@ import butterknife.ButterKnife;
  * Created by yangfan on 2017/7/23.
  */
 
-public class ThemeStoryAdapter extends RecyclerView.Adapter {
+public class ThemeStoryAdapter extends RecyclerView.Adapter implements View.OnClickListener{
     private static final String TAG = ThemeStoryAdapter.class.getSimpleName();
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_AVATARS = 1;
     public static final int TYPE_ITEM = 2;
     private DailyThemeStories themeStories;
+    private OnItemClickListener clickListener;
+    public void setOnItemClickListener(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
 
     public ThemeStoryAdapter() {
     }
@@ -69,6 +73,9 @@ public class ThemeStoryAdapter extends RecyclerView.Adapter {
                 mItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_content_item,parent,false);
                 mViewHolder = new StoryContentHolder(mItemView);
         }
+        if(mItemView != null && viewType != TYPE_HEADER){
+            mItemView.setOnClickListener(this);
+        }
 
         return mViewHolder;
     }
@@ -93,6 +100,9 @@ public class ThemeStoryAdapter extends RecyclerView.Adapter {
             case TYPE_ITEM:
                 final int storyPosition = hasEditors() ? position - 2 : position - 1;
                 ((StoryContentHolder)holder).bindStoryView(themeStories.getStories().get(storyPosition));
+
+                DailyStory story = themeStories.getStories().get(storyPosition);
+                holder.itemView.setTag(story.getId());
                 break;
             default:
                 throw new IllegalArgumentException("error view type");
@@ -129,6 +139,11 @@ public class ThemeStoryAdapter extends RecyclerView.Adapter {
 
     private boolean hasEditors(){
         return themeStories.getEditors()!=null && themeStories.getEditors().size()>0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        clickListener.onItemClick(v, (int)v.getTag());
     }
 
     private static class HeadViewHolder extends RecyclerView.ViewHolder{

@@ -2,6 +2,7 @@ package com.example.mvp_demo.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.injector.component.DaggerThemeStoryComponent;
@@ -9,6 +10,8 @@ import com.example.mvp_demo.injector.modules.ThemeStoryModule;
 import com.example.mvp_demo.mvpMode.beans.DailyThemeStories;
 import com.example.mvp_demo.mvpPresenter.IBasePresenter;
 import com.example.mvp_demo.mvpView.IThemeStoryView;
+import com.example.mvp_demo.ui.activity.StoryDetailActivity;
+import com.example.mvp_demo.ui.adapter.OnItemClickListener;
 import com.example.mvp_demo.ui.adapter.ThemeStoryAdapter;
 import com.example.mvp_demo.utils.OnRequestDataListener;
 import com.example.mvp_demo.utils.SwipeLoadMoreHelper;
@@ -21,7 +24,7 @@ import butterknife.BindView;
  * Created by yangfan on 2017/7/23.
  */
 
-public class ThemeStoriesFragment extends BaseFragment<IBasePresenter> implements IThemeStoryView {
+public class ThemeStoriesFragment extends BaseFragment<IBasePresenter> implements IThemeStoryView,OnItemClickListener {
 
     @Inject
     ThemeStoryAdapter mAdapter;
@@ -57,6 +60,8 @@ public class ThemeStoriesFragment extends BaseFragment<IBasePresenter> implement
             }
         });
         recyclerView.setOnScrollListener(helper);
+
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -68,5 +73,10 @@ public class ThemeStoriesFragment extends BaseFragment<IBasePresenter> implement
     @Override
     public void showThemeStory(DailyThemeStories stories) {
         mAdapter.setTheme(stories);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        StoryDetailActivity.launcherActivity(this.getActivity(),this.getClass(),String.valueOf(position));
     }
 }

@@ -28,6 +28,8 @@
         <item name="item_date_text_color">@color/item_date_text_color</item>
         <item name="item_story_text_color">@color/item_story_text_color</item>
         <item name="item_story_background_color">@color/card_background_color</item>
+
+        <item name="story_detail_comment_sofa">@mipmap/story_comment_empty_sofa</item>
     </style>
 
     <style name="NightTheme" parent="AppTheme">
@@ -38,6 +40,8 @@
         <item name="item_date_text_color">@color/color888888</item>
         <item name="item_story_text_color">@color/white</item>
         <item name="item_story_background_color">@color/color404040</item>
+
+        <item name="story_detail_comment_sofa">@mipmap/story_comment_empty_sofa_dark</item>
     </style>
 
     <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Light" >

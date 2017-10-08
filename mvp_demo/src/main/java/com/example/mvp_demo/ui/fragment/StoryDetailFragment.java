@@ -1,11 +1,15 @@
 package com.example.mvp_demo.ui.fragment;
 
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -15,14 +19,19 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mvp_demo.R;
 import com.example.mvp_demo.injector.component.DaggerStoryDetailComponent;
 import com.example.mvp_demo.injector.modules.StoryDetailModule;
 import com.example.mvp_demo.mvpMode.beans.Editor;
 import com.example.mvp_demo.mvpMode.beans.StoryDetail;
+import com.example.mvp_demo.mvpMode.beans.StoryExtra;
+import com.example.mvp_demo.mvpPresenter.StoryDetailPresenter;
 import com.example.mvp_demo.mvpView.IStoryDetailView;
 import com.example.mvp_demo.ui.activity.StoryDetailActivity;
+import com.example.mvp_demo.utils.Logger;
 import com.example.mvp_demo.utils.ScrollPullDownHelper;
 import com.example.mvp_demo.utils.WebUtils;
 import com.example.mvp_demo.widget.AvatarsView;
@@ -40,6 +49,7 @@ import butterknife.BindView;
 
 public class StoryDetailFragment extends BaseFragment implements IStoryDetailView {
 
+    private static String TAG = StoryDetailFragment.class.getSimpleName();
     private static final String ARG_STORY_ID = "story_id";
 
     @BindView((R.id.rl_container_header))
@@ -57,6 +67,7 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
     private int mStoryId;
     private Toolbar mActionBarToolbar;
     private ScrollPullDownHelper mScrollPullDownHelper;
+    private boolean isLikeIt = false;
 
     public static StoryDetailFragment newInstance(int storyId) {
         Bundle args = new Bundle();
@@ -102,6 +113,8 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         mStoryHeaderView = StoryHeaderView.newInstance(mContext);
         mAvatarsView = AvatarsView.newInstance(mContext);
         mActionBarToolbar = ((StoryDetailActivity)getActivity()).getToolbar();
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -117,7 +130,13 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         bindWebView(detail,hasImage);
     }
 
-    private void bindHeaderView(StoryDetail detail,boolean hasImage){
+    @Override
+    public void showExtra(StoryExtra extra) {
+        ((TextView)mActionBarToolbar.getMenu().findItem(R.id.story_comment).getActionView()).setText(String.valueOf(extra.getComments()));
+        ((TextView)mActionBarToolbar.getMenu().findItem(R.id.story_like).getActionView()).setText(String.valueOf(extra.getPopularity()));
+    }
+
+    private void bindHeaderView(StoryDetail detail, boolean hasImage){
         if(hasImage){
             if (mActionBarToolbar != null) {
 //                mActionBarToolbar.getBackground().mutate().setAlpha(1);
@@ -163,10 +182,12 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         } else {
 //            boolean isNightMode = SharedPrefUtils.isNightMode(getContext());
             String data = WebUtils.buildHtmlWithCss(detail.getBody(), detail.getCss(), false);
-            mWebViewSoftReference.get().loadDataWithBaseURL(WebUtils.BASE_URL, data, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
-            if (hasImage) {
+            mWebViewSoftReference.get().loadDataWithBaseURL(WebUtils.BASE_URL, data, WebUtils.MIME_TYPE, WebUtils.ENCODING, null);
+//            String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"zhihu.css\" />" + detail.getBody();
+//            mWebViewSoftReference.get().loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "utf-8", null);
+            /*if (hasImage) {
                 addScrollListener();
-            }
+            }*/
         }
     }
 
@@ -203,7 +224,8 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         float contentHeight = storyHeaderViewHeight - toolbarHeight;
 
         float ratio = Math.min(scrollY / contentHeight, 1.0f);
-        mActionBarToolbar.getBackground().mutate().setAlpha((int) (ratio * 0xFF));
+        mActionBarToolbar.getBackground().mutate().setAlpha((int) ((1-ratio) * 0xFF));
+        Logger.i(TAG,"alpha = " + (int) ((1-ratio) * 0xFF));
 
         if (scrollY <= contentHeight) {
             mActionBarToolbar.setY(0f);
@@ -224,6 +246,67 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         this.mActionBarToolbar = toolbar;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.story_activity_menu, menu);
+        final MenuItem commentItem = menu.findItem(R.id.story_comment);
+        commentItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(commentItem);
+            }
+        });
+        final MenuItem likeItem = menu.findItem(R.id.story_like);
+        likeItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(likeItem);
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+        //当Menu初始化完成后，开始加载menu所需要的数据（如果在updateViews中请求数据的话，有可能menu还没有初始化完成）
+        ((StoryDetailPresenter)mPresenter).requestStoryComment();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.story_share:
+                break;
+            case R.id.story_store:
+                break;
+            case R.id.story_comment:
+
+                break;
+            case R.id.story_like:
+                Drawable drawable = null;
+                int likeCount =  Integer.parseInt(((TextView)item.getActionView()).getText().toString());
+                if(!isLikeIt){
+                    //在左侧添加图片
+                    drawable = getResources().getDrawable(R.mipmap.ic_menu_like);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    ((TextView)item.getActionView()).setCompoundDrawables(drawable, null, null, null);
+
+                    likeCount += 1;
+                    ((TextView)item.getActionView()).setText(String.valueOf(likeCount));
+                    Toast.makeText(this.getContext(), ((TextView)item.getActionView()).getText() + "+1", Toast.LENGTH_SHORT ).show();
+                    isLikeIt = true;
+                }else {
+                    drawable = getResources().getDrawable(R.mipmap.ic_menu_unlike);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    ((TextView)item.getActionView()).setCompoundDrawables(drawable, null, null, null);
+
+                    likeCount -= 1;
+                    ((TextView)item.getActionView()).setText(String.valueOf(likeCount));
+                    isLikeIt = false;
+                }
+                break;
+            default:break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onResume() {

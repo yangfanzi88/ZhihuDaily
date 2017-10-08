@@ -6,6 +6,7 @@
     <attr name="item_date_text_color" format="color"/>
     <attr name="item_story_text_color" format="color"/>
     <attr name="item_story_background_color" format="color"/>
+    <attr name="story_detail_comment_sofa" format="reference"/>
 
     <declare-styleable name="EmptyLayout">
         <attr name="background_color" format="color"/>

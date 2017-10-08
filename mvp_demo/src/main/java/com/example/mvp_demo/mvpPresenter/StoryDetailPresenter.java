@@ -1,6 +1,7 @@
 package com.example.mvp_demo.mvpPresenter;
 
 import com.example.mvp_demo.mvpMode.beans.StoryDetail;
+import com.example.mvp_demo.mvpMode.beans.StoryExtra;
 import com.example.mvp_demo.mvpMode.network.RetrofitService;
 import com.example.mvp_demo.mvpView.IStoryDetailView;
 import com.example.mvp_demo.utils.Logger;
@@ -78,5 +79,28 @@ public class StoryDetailPresenter implements IBasePresenter {
     @Override
     public void requestMoreData() {
 
+    }
+
+    public void requestStoryComment(){
+        RetrofitService.getNewsService()
+                .getStoryExtra(mStoryId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<StoryExtra>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(StoryExtra storyExtra) {
+                        mView.showExtra(storyExtra);
+                    }
+                });
     }
 }

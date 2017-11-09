@@ -16,6 +16,7 @@ import com.example.mvp_demo.ui.adapter.OnItemClickListener;
 import com.example.mvp_demo.utils.Logger;
 import com.example.mvp_demo.utils.OnRequestDataListener;
 import com.example.mvp_demo.utils.SwipeLoadMoreHelper;
+import com.example.mvp_demo.widget.MyViewPager;
 
 import javax.inject.Inject;
 
@@ -80,5 +81,31 @@ public class DailyStoriesFragment extends BaseFragment<IBasePresenter> implement
     @Override
     public void onItemClick(View view, int position) {
         StoryDetailActivity.launcherActivity(this.getActivity(),this.getClass(),String.valueOf(position));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recyclerView != null) {
+            Logger.i(TAG, "recyclerView != null");
+            View view = recyclerView.findViewById(R.id.viewPager);
+            if (view != null) {
+                Logger.i(TAG, "MyViewPager startAutoScroll");
+                ((MyViewPager) view).startAutoScroll();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (recyclerView != null) {
+            Logger.i(TAG, "recyclerView !=null");
+            View view = recyclerView.findViewById(R.id.viewPager);
+            if (view != null) {
+                Logger.i(TAG, "MyViewPager stopAutoScroll");
+                ((MyViewPager) view).stopAutoScroll();
+            }
+        }
     }
 }

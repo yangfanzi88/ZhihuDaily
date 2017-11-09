@@ -4,7 +4,7 @@ import com.example.mvp_demo.injector.scope.PerFragment;
 import com.example.mvp_demo.mvpPresenter.IBasePresenter;
 import com.example.mvp_demo.mvpPresenter.StoryCommentPresenter;
 import com.example.mvp_demo.mvpView.IStoryCommentView;
-import com.example.mvp_demo.ui.fragment.StoryCommentFragment;
+import com.example.mvp_demo.ui.adapter.StoryCommentAdapter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,5 +28,11 @@ public class StoryCommentModule {
     @Provides
     public IBasePresenter providerPresenter(){
         return new StoryCommentPresenter(mView, storyId);
+    }
+
+    @PerFragment
+    @Provides
+    public StoryCommentAdapter providerAdapter(){
+        return new StoryCommentAdapter();
     }
 }

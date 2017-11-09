@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/mask"/>
+        android:src="@drawable/story_detail_image_mask"/>
 
     <TextView
         android:id="@+id/title"

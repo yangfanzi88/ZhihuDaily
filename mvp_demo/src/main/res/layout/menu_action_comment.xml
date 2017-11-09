@@ -6,7 +6,7 @@
     android:drawablePadding="@dimen/spacing_4"
     android:paddingStart="@dimen/spacing_4"
     android:paddingEnd="@dimen/spacing_8"
-    android:text="@string/story_menu_share"
-    android:drawableLeft="@mipmap/ic_menu_share"
+    android:text=""
+    android:drawableLeft="@mipmap/ic_menu_comment"
     android:textColor="@color/white"
     android:clickable="true" />

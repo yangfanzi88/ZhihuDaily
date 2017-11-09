@@ -163,6 +163,7 @@ public class DailyStoryAdapter extends RecyclerView.Adapter implements View.OnCl
         if(clickListener != null){
             clickListener.onItemClick(view, position);
         }
+
     }
 
     public static class HeaderViewPagerHolder extends RecyclerView.ViewHolder{

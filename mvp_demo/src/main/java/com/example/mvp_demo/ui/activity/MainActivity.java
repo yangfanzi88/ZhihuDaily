@@ -1,6 +1,7 @@
 package com.example.mvp_demo.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -39,9 +40,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     public CharSequence mTitle = "";
     private int mLastPosition = 0;
     private long mLastExitTime = 0;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        handler = new Handler(getMainLooper());
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
     }
@@ -65,11 +68,17 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             setActionBar();
             showFragment(0);
         }else {
-            int position = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            final int position = savedInstanceState.getInt(STATE_SELECTED_POSITION);
 //            mLastPosition = position;
-            mTitle = mNavigationFragment.getTitle(position);
-            setActionBar();
-            mNavigationFragment.selectItem(position);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mTitle = mNavigationFragment.getTitle(position);
+                    setActionBar();
+                    mNavigationFragment.selectItem(position);
+                }
+            }, 1000);
+
         }
 
     }

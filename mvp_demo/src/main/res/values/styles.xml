@@ -27,9 +27,12 @@
         <item name="windowBackground">@color/style_window_background</item>
         <item name="item_date_text_color">@color/item_date_text_color</item>
         <item name="item_story_text_color">@color/item_story_text_color</item>
+        <item name="item_story_text_content_color">@color/item_story_text_content_color</item>
         <item name="item_story_background_color">@color/card_background_color</item>
 
+        <item name="android:listDivider">@drawable/my_decoration_divider</item>
         <item name="story_detail_comment_sofa">@mipmap/story_comment_empty_sofa</item>
+        <item name="story_detail_comment_more_bg">@drawable/story_comment_more_bg</item>
     </style>
 
     <style name="NightTheme" parent="AppTheme">
@@ -39,9 +42,12 @@
         <item name="windowBackground">@color/window_background_night</item>
         <item name="item_date_text_color">@color/color888888</item>
         <item name="item_story_text_color">@color/white</item>
+        <item name="item_story_text_content_color">@color/color6c6c6c</item>
         <item name="item_story_background_color">@color/color404040</item>
 
+        <item name="android:listDivider">@drawable/my_decoration_divider</item>
         <item name="story_detail_comment_sofa">@mipmap/story_comment_empty_sofa_dark</item>
+        <item name="story_detail_comment_more_bg">@drawable/story_comment_more_dark_bg</item>
     </style>
 
     <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Light" >

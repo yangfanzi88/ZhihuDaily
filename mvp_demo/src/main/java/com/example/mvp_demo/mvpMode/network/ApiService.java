@@ -47,11 +47,19 @@ public interface ApiService {
 
     //http://news-at.zhihu.com/api/4/story/8997528/long-comments
     @GET("story/{id}/long-comments")
-    Observable<List<StoryComment>> getStoryLongComments(@Path("id") int id);
+    Observable<StoryComment> getStoryLongComments(@Path("id") int id);
+
+    //http://news-at.zhihu.com/api/4/story/9652686/long-comments/before/30511242
+    @GET("story/{storyId}/long-comments/before/{commentId}")
+    Observable<StoryComment> getStoryBeforeLongComments(@Path("storyId") int storyId, @Path("commentId") int commentId);
 
     //http://news-at.zhihu.com/api/4/story/4232852/short-comments
     @GET("story/{id}/short-comments")
-    Observable<List<StoryComment>> getStoryShortComments(@Path("id") int id);
+    Observable<StoryComment> getStoryShortComments(@Path("id") int id);
+
+    //http://news-at.zhihu.com/api/4/story/9651534/short-comments/before/30494087
+    @GET("story/{storyId}/short-comments/before/{commentId}")
+    Observable<StoryComment> getStoryBeforeShortComments(@Path("storyId") int storyId, @Path("commentId") int commentId);
 
     //http://news-at.zhihu.com/api/4/themes
     @GET("themes")

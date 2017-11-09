@@ -77,12 +77,12 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mStoryId = getArguments().getInt(ARG_STORY_ID);
         mScrollPullDownHelper = new ScrollPullDownHelper();
-        return super.onCreateView(inflater, container, savedInstanceState);
+        Logger.i(TAG, "story ID is : " + mStoryId);
     }
 
     @Override
@@ -133,6 +133,8 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
     @Override
     public void showExtra(StoryExtra extra) {
         ((TextView)mActionBarToolbar.getMenu().findItem(R.id.story_comment).getActionView()).setText(String.valueOf(extra.getComments()));
+        //将StoryExtra添加到tag中
+        ((TextView)mActionBarToolbar.getMenu().findItem(R.id.story_comment).getActionView()).setTag(extra);
         ((TextView)mActionBarToolbar.getMenu().findItem(R.id.story_like).getActionView()).setText(String.valueOf(extra.getPopularity()));
     }
 
@@ -278,7 +280,11 @@ public class StoryDetailFragment extends BaseFragment implements IStoryDetailVie
             case R.id.story_store:
                 break;
             case R.id.story_comment:
-
+                StoryExtra extra = null;
+                if(item.getActionView().getTag() instanceof StoryExtra){
+                    extra = (StoryExtra) item.getActionView().getTag();
+                }
+                ((StoryDetailActivity)getActivity()).replaceFragment(R.id.container,StoryCommentFragment.newInstance(mStoryId, extra), StoryCommentFragment.class.getSimpleName()+mStoryId);
                 break;
             case R.id.story_like:
                 Drawable drawable = null;

@@ -52,7 +52,7 @@ public class StoryDetailActivity extends BaseActivity{
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        replaceFragment(R.id.container, StoryDetailFragment.newInstance(mStoryId), String.valueOf(mStoryId));
+        replaceFragment(R.id.container, StoryDetailFragment.newInstance(mStoryId), String.valueOf(mStoryId + StoryDetailFragment.class.getSimpleName()));
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();

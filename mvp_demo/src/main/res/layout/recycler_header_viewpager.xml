@@ -4,6 +4,12 @@
     android:layout_height="@dimen/view_header_story_height"
     android:layout_marginBottom="8dp">
 
+    <com.example.mvp_demo.widget.MyViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
     <com.example.mvp_demo.widget.CirclePageIndicator xmlns:CirclePageIndicator="http://schemas.android.com/apk/res-auto"
         android:id="@+id/indicator"
         android:layout_width="match_parent"
@@ -14,13 +20,5 @@
         CirclePageIndicator:fillColor="#ffffffff"
         CirclePageIndicator:pageColor="#9f888888"
         CirclePageIndicator:strokeWidth="0dp" />
-
-    <com.example.mvp_demo.widget.MyViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
 
 </RelativeLayout>

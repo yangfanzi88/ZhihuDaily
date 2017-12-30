@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,18 +35,25 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
     public static final int TYPE_EMPTY = 2;
 
     public static final String LONG_COMMENT = "long";
+    public static final String LONG_COMMENT_ITEM = "long_item";
     public static final String SHORT_COMMENT = "short";
+    public static final String SHORT_COMMENT_ITEM = "short_item";
     public static final String EMPTY_COMMENT = "empty";
 
     private StoryExtra mStoryExtra;
     private List<StoryComment.Comment> commentList = new ArrayList<>();
     private int shortCommentPosition = 1;//记录短评title的位置
+    private OnItemClickListener mItemClickListener;
 
     public StoryCommentAdapter() {
         StoryComment.Comment longComment = new StoryComment.Comment(LONG_COMMENT);
         StoryComment.Comment shortComment = new StoryComment.Comment(SHORT_COMMENT);
         commentList.add(longComment);
         commentList.add(shortComment);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mItemClickListener = listener;
     }
 
     public void setCommentExtra(StoryExtra storyExtra){
@@ -60,10 +66,16 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
                 commentList.add(1,new StoryComment.Comment(EMPTY_COMMENT));
                 shortCommentPosition += 1;
             }else {
+                for (StoryComment.Comment comment: storyComment.getComments()) {
+                    comment.setType(LONG_COMMENT_ITEM);
+                }
                 commentList.addAll(shortCommentPosition,storyComment.getComments());
                 shortCommentPosition += storyComment.getComments().size();
             }
         }else {
+            for (StoryComment.Comment comment: storyComment.getComments()) {
+                comment.setType(SHORT_COMMENT_ITEM);
+            }
             commentList.addAll(storyComment.getComments());
         }
 
@@ -139,7 +151,7 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class CommentTypeHolder extends RecyclerView.ViewHolder{
+    public class CommentTypeHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.story_comment_type)
         TextView mCommentTypeName;
         @BindView(R.id.story_comment_more)
@@ -151,6 +163,7 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
             super(itemView);
             ButterKnife.bind(this,itemView);
             mContext = itemView.getContext();
+            mCommentMore.setOnClickListener(onClick);
         }
 
         public void bindTypeData(String typeName){
@@ -161,7 +174,7 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class CommentItemHolder extends RecyclerView.ViewHolder{
+    public class CommentItemHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.story_detail_comment_item_avatar)
         ImageView mCommentAvatar;
         @BindView(R.id.story_detail_comment_item_name)
@@ -197,11 +210,15 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
             }else {
                 wholeContent = storyComment.getContent();
             }
-            if(!TextUtils.isEmpty(storyComment.getType()) && storyComment.getType().equals("long")){
+            mCommentExtend.setVisibility(View.GONE);
+            if(!TextUtils.isEmpty(storyComment.getType()) && storyComment.getType().equals(LONG_COMMENT_ITEM)){
                 mCommentContent.setText(wholeContent);
             }else {
                 mCommentContent.setMaxLines(3);
                 mCommentContent.setText(wholeContent);
+                if(mCommentContent.getLineCount()>=3){
+                    mCommentExtend.setVisibility(View.VISIBLE);
+                }
             }
 
             mCommentLike.setText(String.valueOf(storyComment.getLikes()));
@@ -214,7 +231,7 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class CommentEmptyHolder extends RecyclerView.ViewHolder{
+    public class CommentEmptyHolder extends RecyclerView.ViewHolder{
         View mItemview;
         public CommentEmptyHolder(View itemView) {
             super(itemView);
@@ -223,4 +240,16 @@ public class StoryCommentAdapter extends RecyclerView.Adapter {
         public void bindEmptyDate(){
         }
     }
+
+    private View.OnClickListener onClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.story_comment_more:
+                    if(mItemClickListener!=null){
+                        mItemClickListener.onItemClick(v, -1);
+                    }
+            }
+        }
+    };
 }

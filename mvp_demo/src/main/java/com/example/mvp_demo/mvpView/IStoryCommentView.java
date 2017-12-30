@@ -9,5 +9,5 @@ import java.util.List;
  */
 
 public interface IStoryCommentView extends IBaseView{
-    void showComment(StoryComment storyComment);
+    void showComment(StoryComment storyComment, boolean longComment);
 }

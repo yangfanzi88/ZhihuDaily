@@ -20,6 +20,7 @@
     <string name="story_menu_store">收藏</string>
     <string name="story_menu_comment">评论</string>
     <string name="story_menu_like">点赞</string>
+    <string name="story_detail_comment_toolbar_title">%1$s条点评</string>
     <string name="story_detail_comment_no">深度长评虚位以待</string>
     <string name="story_detail_comment_title">%1$d条%2$s评</string>
     <string name="story_detail_comment_long">长</string>

@@ -20,7 +20,7 @@ import rx.schedulers.Schedulers;
 public class StoryCommentPresenter implements IBasePresenter {
     private static String TAG = StoryCommentPresenter.class.getSimpleName();
     private IStoryCommentView mView;
-    private int mStoryId;
+    private int mStoryId, mLongCommentId, mShortCommentId;
 
     public StoryCommentPresenter(IStoryCommentView mView, int storyId) {
         this.mView = mView;
@@ -70,13 +70,100 @@ public class StoryCommentPresenter implements IBasePresenter {
 
                     @Override
                     public void onNext(StoryComment storyComments) {
-                        mView.showComment(storyComments);
+                        mView.showComment(storyComments, true);
+                        if(storyComments.getComments() != null && storyComments.getComments().size() >0){
+                            int size = storyComments.getComments().size();
+                            mLongCommentId = storyComments.getComments().get(size-1).getId();
+                        }
+
                     }
                 });
+    }
+
+    public void requestMoreComment(boolean isLong){
+        if(isLong){
+            RetrofitService.getNewsService()
+                    .getStoryBeforeLongComments(mStoryId, mLongCommentId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<StoryComment>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(StoryComment storyComments) {
+                            mView.showComment(storyComments, true);
+                            if(storyComments.getComments() != null && storyComments.getComments().size() >0){
+                                int size = storyComments.getComments().size();
+                                mLongCommentId = storyComments.getComments().get(size-1).getId();
+                            }
+
+                        }
+                    });
+        }else {
+            RetrofitService.getNewsService()
+                    .getStoryBeforeShortComments(mStoryId, mShortCommentId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<StoryComment>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(StoryComment storyComments) {
+                            mView.showComment(storyComments, false);
+                            if(storyComments.getComments() != null && storyComments.getComments().size() > 0){
+                                int size = storyComments.getComments().size();
+                                mShortCommentId = storyComments.getComments().get(size-1).getId();
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
     public void requestMoreData() {
 
+    }
+
+    public void requestShortComment(){
+        RetrofitService.getNewsService()
+                .getStoryShortComments(mStoryId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<StoryComment>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(StoryComment storyComments) {
+                        mView.showComment(storyComments, false);
+                        if(storyComments.getComments() != null && storyComments.getComments().size() > 0){
+                            int size = storyComments.getComments().size();
+                            mShortCommentId = storyComments.getComments().get(size-1).getId();
+                        }
+                    }
+                });
     }
 }
